@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Custom ChatBot with Memory</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+<div class="wrapper">
+
+    <div class="chat-container">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>🤖 Custom ChatBot with Memory</h1>
+            <p>Phi-3 | LangChain | Flask</p>
+        </div>
+
+        <!-- Chat Box -->
+        <div id="chat-box" class="chat-box"></div>
+
+        <!-- Typing Indicator -->
+        <div id="typing" class="typing hidden">Bot is typing...</div>
+
+        <!-- Input -->
+        <div class="input-area">
+            <input type="text" id="user-input" placeholder="Type your message..." onkeydown="handleKey(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+function handleKey(event) {
+    if (event.key === "Enter") {
+        sendMessage();
+    }
+}
+
+function sendMessage() {
+    let input = document.getElementById("user-input");
+    let message = input.value.trim();
+
+    if (message === "") return;
+
+    let chatBox = document.getElementById("chat-box");
+    let typing = document.getElementById("typing");
+
+    // Show user message
+    chatBox.innerHTML += `
+        <div class="message user">
+            <div class="bubble">${message}</div>
+        </div>
+    `;
+
+    chatBox.scrollTop = chatBox.scrollHeight;
+
+    // Show typing indicator
+    typing.classList.remove("hidden");
+
+    // Send request
+    fetch("/chat", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message: message })
+    })
+    .then(res => res.json())
+    .then(data => {
+        typing.classList.add("hidden");
+
+        chatBox.innerHTML += `
+            <div class="message bot">
+                <div class="bubble">${data.response}</div>
+            </div>
+        `;
+
+        chatBox.scrollTop = chatBox.scrollHeight;
+    });
+
+    input.value = "";
+}
+</script>
+
+</body>
+</html>
