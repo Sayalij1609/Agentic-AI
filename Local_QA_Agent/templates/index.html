@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Local QA Chatbot</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Chats</h2>
+        <ul id="history"></ul>
+    </div>
+
+    <!-- Chat Section -->
+    <div class="chat-section">
+
+        <!-- Header -->
+        <div class="header">
+            <h1>Local QA Chatbot</h1>
+        </div>
+
+        <!-- Chat Messages -->
+        <div id="chat-box"></div>
+
+        <!-- Input Area -->
+        <div class="input-area">
+            <input 
+                type="text" 
+                id="user-input" 
+                placeholder="Ask anything..." 
+                onkeypress="if(event.key === 'Enter') sendMessage()"
+            />
+            <button onclick="sendMessage()">➤</button>
+        </div>
+
+    </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
